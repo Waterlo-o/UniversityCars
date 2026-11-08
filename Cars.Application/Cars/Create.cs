@@ -23,6 +23,11 @@ public class Create
 
         public async Task<Car> Handle(Command request, CancellationToken cancellationToken)
         {
+            if (request.Car.Id == Guid.Empty)
+            {
+                request.Car.Id = Guid.NewGuid();
+            }
+
             _context.Cars.Add(request.Car);
             await _context.SaveChangesAsync(cancellationToken);
 

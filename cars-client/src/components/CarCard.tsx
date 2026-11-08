@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import type { Car } from '../models/Car';
 import { FuelTypeLabels, BodyTypeLabels } from '../models/Car';
+import { useCarUiStore } from '../store/useCarUiStore';
 
 interface CarCardProps {
   car: Car;
@@ -8,6 +9,12 @@ interface CarCardProps {
 }
 
 export default function CarCard({ car, onDelete }: CarCardProps) {
+  const isFavorite = useCarUiStore((state) =>
+    state.favoriteCarIds.includes(car.id)
+  );
+
+  const toggleFavorite = useCarUiStore((state) => state.toggleFavorite);
+
   return (
     <div className="car-card">
       <div className="car-card-header">
@@ -27,6 +34,17 @@ export default function CarCard({ car, onDelete }: CarCardProps) {
       </div>
 
       <div className="car-card-actions">
+        <button
+          type="button"
+          className={
+            isFavorite
+              ? 'btn favorite-button active-favorite'
+              : 'btn favorite-button'
+          }
+          onClick={() => toggleFavorite(car.id)}
+        >
+          {isFavorite ? 'Ulubiony' : 'Ulubione'}
+        </button>
         <Link to={`/cars/${car.id}`} className="btn btn-outline">
           Szczegóły
         </Link>

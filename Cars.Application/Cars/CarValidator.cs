@@ -32,7 +32,7 @@ public class CarValidator : AbstractValidator<Car>
             .WithMessage("Engine capacity must be greater than 0.");
 
         RuleFor(x => x.ProductionDate)
-            .LessThanOrEqualTo(DateTime.UtcNow)
+            .LessThanOrEqualTo(x => DateTime.UtcNow.Date.AddDays(1))
             .WithMessage("Production date cannot be in the future.");
 
         RuleFor(x => x.AverageFuelConsumption)

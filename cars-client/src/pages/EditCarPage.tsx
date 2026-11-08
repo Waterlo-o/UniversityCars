@@ -1,5 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type SubmitEvent } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
+import axios from 'axios';
 import type { NewCar } from '../models/Car';
 import { FuelTypeLabels, BodyTypeLabels } from '../models/Car';
 import { getCarById, updateCar } from '../services/carService';
@@ -52,13 +53,19 @@ export default function EditCarPage() {
           averageFuelConsumption: data.averageFuelConsumption,
           bodyType: data.bodyType,
         });
-      } catch (err) {
-        if (err instanceof DOMException && err.name === 'AbortError') {
+      } catch (caughtError) {
+        if (axios.isCancel(caughtError)) {
           return;
         }
-        setError(err instanceof Error ? err.message : 'Nie udało się pobrać danych');
+        setError(
+          caughtError instanceof Error
+            ? caughtError.message
+            : 'Nie udało się pobrać danych'
+        );
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     }
 
@@ -100,8 +107,12 @@ export default function EditCarPage() {
       setError(null);
       await updateCar(id, formData);
       navigate(`/cars/${id}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Błąd podczas aktualizacji');
+    } catch (caughtError) {
+      setError(
+        caughtError instanceof Error
+          ? caughtError.message
+          : 'Błąd podczas aktualizacji'
+      );
     } finally {
       setIsSubmitting(false);
     }

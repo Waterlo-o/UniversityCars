@@ -1,0 +1,56 @@
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+node_modules/
+dist/
+
+## Visual Studio / VS Code / JetBrains
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Postman local desktop files
+.postman/
+postman/
+
+## Database & Local Data
+*.db
+*.db-shm
+*.db-wal
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## AI & Assistant files
+AGENTS.md
+.agents/
+.agent/
+_agents/
+_agent/
+CLAUDE.md
+.claude/
+.cursor/
+.cursorrules
+.windsurf/
+.clinerules/
+.gemini/
+.github/copilot*
+copilot-instructions.md
+.qoder/
+.kiro/

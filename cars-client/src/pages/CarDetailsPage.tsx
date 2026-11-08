@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
+import axios from 'axios';
 import type { Car } from '../models/Car';
 import { FuelTypeLabels, BodyTypeLabels } from '../models/Car';
 import { getCarById, deleteCar } from '../services/carService';
+import { useCarUiStore } from '../store/useCarUiStore';
 
 export default function CarDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +13,10 @@ export default function CarDetailsPage() {
   const [car, setCar] = useState<Car | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const favoriteCarIds = useCarUiStore((state) => state.favoriteCarIds);
+  const toggleFavorite = useCarUiStore((state) => state.toggleFavorite);
+  const removeFavorite = useCarUiStore((state) => state.removeFavorite);
 
   useEffect(() => {
     if (!id) {
@@ -25,13 +31,20 @@ export default function CarDetailsPage() {
         setError(null);
         const data = await getCarById(id!, controller.signal);
         setCar(data);
-      } catch (err) {
-        if (err instanceof DOMException && err.name === 'AbortError') {
+      } catch (caughtError) {
+        if (axios.isCancel(caughtError)) {
           return;
         }
-        setError(err instanceof Error ? err.message : 'Nie udało się pobrać szczegółów');
+
+        if (caughtError instanceof Error) {
+          setError(caughtError.message);
+        } else {
+          setError('Nie udalo sie pobrac szczegolow.');
+        }
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     }
 
@@ -50,9 +63,14 @@ export default function CarDetailsPage() {
 
     try {
       await deleteCar(car.id);
+      removeFavorite(car.id);
       navigate('/cars');
-    } catch (err) {
-      alert(err instanceof Error ? err.message : 'Błąd podczas usuwania');
+    } catch (caughtError) {
+      alert(
+        caughtError instanceof Error
+          ? caughtError.message
+          : 'Błąd podczas usuwania'
+      );
     }
   }
 
@@ -79,6 +97,7 @@ export default function CarDetailsPage() {
     );
   }
 
+  const isFavorite = favoriteCarIds.includes(car.id);
   const formattedDate = car.productionDate
     ? new Date(car.productionDate).toLocaleDateString('pl-PL')
     : '-';
@@ -95,7 +114,19 @@ export default function CarDetailsPage() {
               {BodyTypeLabels[car.bodyType] ?? 'Inny'}
             </span>
           </div>
+
           <div className="details-actions">
+            <button
+              type="button"
+              className={
+                isFavorite
+                  ? 'btn favorite-button active-favorite'
+                  : 'btn favorite-button'
+              }
+              onClick={() => toggleFavorite(car.id)}
+            >
+              {isFavorite ? 'Ulubiony' : 'Ulubione'}
+            </button>
             <Link to={`/cars/${car.id}/edit`} className="btn btn-secondary">
               Edytuj
             </Link>
