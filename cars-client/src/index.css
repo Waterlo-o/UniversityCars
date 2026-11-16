@@ -477,6 +477,113 @@ body {
   align-items: center;
 }
 
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.user-info {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.12);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+}
+
+.nav-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 0.35rem 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.car-form {
+  max-width: 440px;
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.car-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.car-form input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.car-form input:focus {
+  border-color: #1f5b99;
+  box-shadow: 0 0 0 2px rgba(31, 91, 153, 0.2);
+}
+
+.car-form button[type='submit'] {
+  padding: 0.65rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: #1f5b99;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.car-form button[type='submit']:hover:not(:disabled) {
+  background-color: #174575;
+}
+
+.car-form button[type='submit']:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #842029;
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  max-width: 440px;
+}
+
+.success-message {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border: 1px solid #badbcc;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  max-width: 440px;
+}
+
 @media (max-width: 640px) {
   .form-row {
     grid-template-columns: 1fr;

@@ -5,6 +5,7 @@ import type { Car } from '../models/Car';
 import { FuelTypeLabels, BodyTypeLabels } from '../models/Car';
 import { getCarById, deleteCar } from '../services/carService';
 import { useCarUiStore } from '../store/useCarUiStore';
+import { useAuthStore } from '../store/useAuthStore';
 
 export default function CarDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -14,9 +15,15 @@ export default function CarDetailsPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const favoriteCarIds = useCarUiStore((state) => state.favoriteCarIds);
+  const user = useAuthStore((state) => state.user);
+
+  const favoriteCarIds = useCarUiStore((state) =>
+    user ? state.favoriteCarIdsByUser[user.id] ?? [] : [],
+  );
   const toggleFavorite = useCarUiStore((state) => state.toggleFavorite);
   const removeFavorite = useCarUiStore((state) => state.removeFavorite);
+
+  const isAdmin = user?.roles.includes('Admin') ?? false;
 
   useEffect(() => {
     if (!id) {
@@ -63,13 +70,15 @@ export default function CarDetailsPage() {
 
     try {
       await deleteCar(car.id);
-      removeFavorite(car.id);
+      if (user) {
+        removeFavorite(user.id, car.id);
+      }
       navigate('/cars');
     } catch (caughtError) {
       alert(
         caughtError instanceof Error
           ? caughtError.message
-          : 'Błąd podczas usuwania'
+          : 'Błąd podczas usuwania',
       );
     }
   }
@@ -123,20 +132,26 @@ export default function CarDetailsPage() {
                   ? 'btn favorite-button active-favorite'
                   : 'btn favorite-button'
               }
-              onClick={() => toggleFavorite(car.id)}
+              onClick={() => {
+                if (user) {
+                  toggleFavorite(user.id, car.id);
+                }
+              }}
             >
               {isFavorite ? 'Ulubiony' : 'Ulubione'}
             </button>
             <Link to={`/cars/${car.id}/edit`} className="btn btn-secondary">
               Edytuj
             </Link>
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={handleDelete}
-            >
-              Usuń
-            </button>
+            {isAdmin && (
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={handleDelete}
+              >
+                Usuń
+              </button>
+            )}
           </div>
         </div>
 
