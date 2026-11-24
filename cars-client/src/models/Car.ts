@@ -1,3 +1,14 @@
+export interface CarPhotoDto {
+  id: string;
+  url: string;
+  isMain: boolean;
+}
+
+export interface FeatureDto {
+  id: string;
+  name: string;
+}
+
 export interface Car {
   id: string;
   brand: string;
@@ -9,6 +20,8 @@ export interface Car {
   productionDate: string;
   averageFuelConsumption: number;
   bodyType: number;
+  photos?: CarPhotoDto[];
+  features?: FeatureDto[];
 }
 
 export type NewCar = Omit<Car, 'id'>;

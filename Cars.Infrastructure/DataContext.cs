@@ -15,4 +15,16 @@ public class DataContext
     }
 
     public DbSet<Car> Cars => Set<Car>();
+    public DbSet<CarPhoto> CarPhotos => Set<CarPhoto>();
+    public DbSet<Feature> Features => Set<Feature>();
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.Entity<Car>()
+            .HasMany(car => car.Features)
+            .WithMany(feature => feature.Cars)
+            .UsingEntity(join => join.ToTable("CarFeatures"));
+    }
 }

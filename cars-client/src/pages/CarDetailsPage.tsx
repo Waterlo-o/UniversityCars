@@ -202,6 +202,64 @@ export default function CarDetailsPage() {
           </div>
         </div>
 
+        {car.features && car.features.length > 0 && (
+          <div style={{ marginTop: '1.5rem' }}>
+            <h3>Wyposażenie</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
+              {car.features.map((feature) => (
+                <span
+                  key={feature.id}
+                  className="badge"
+                  style={{ background: '#e0e7ff', color: '#3730a3', padding: '0.4rem 0.8rem', borderRadius: '4px' }}
+                >
+                  {feature.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {car.photos && car.photos.length > 0 && (
+          <div style={{ marginTop: '1.5rem' }}>
+            <h3>Zdjęcia pojazdu</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '0.5rem' }}>
+              {car.photos.map((photo) => (
+                <div
+                  key={photo.id}
+                  style={{
+                    position: 'relative',
+                    border: photo.isMain ? '2px solid #2563eb' : '1px solid #e2e8f0',
+                    borderRadius: '6px',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <img
+                    src={photo.url}
+                    alt="Zdjęcie samochodu"
+                    style={{ width: '200px', height: '140px', objectFit: 'cover', display: 'block' }}
+                  />
+                  {photo.isMain && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        top: 4,
+                        left: 4,
+                        background: '#2563eb',
+                        color: '#fff',
+                        fontSize: '11px',
+                        padding: '2px 6px',
+                        borderRadius: '3px'
+                      }}
+                    >
+                      Główne
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="details-footer">
           <Link to="/cars" className="btn btn-outline">
             &larr; Wróć do listy samochodów
